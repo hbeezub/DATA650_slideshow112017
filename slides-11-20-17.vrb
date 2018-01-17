@@ -1,0 +1,69 @@
+\frametitle{top 10 negative words}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dracula_neg}\hlkwb{<-}\hlstd{dracula_words}\hlopt{%>%}
+  \hlkwd{filter}\hlstd{(sentiment}\hlopt{==}\hlstr{'negative'}\hlstd{)}\hlopt{%>%}
+  \hlkwd{group_by}\hlstd{(word)}\hlopt{%>%}
+  \hlkwd{summarize}\hlstd{(}\hlkwc{count}\hlstd{=}\hlkwd{n}\hlstd{(),}\hlkwc{sentiment}\hlstd{=}\hlkwd{first}\hlstd{(sentiment))}\hlopt{%>%}
+  \hlkwd{arrange}\hlstd{(count)}\hlopt{%>%}
+  \hlkwd{filter}\hlstd{(word} \hlopt{!=} \hlstr{'miss'}\hlstd{)}\hlopt{%>%}
+  \hlkwd{top_n}\hlstd{(}\hlnum{10}\hlstd{,}\hlkwc{wt}\hlstd{=count)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\framebreak
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+  \hlstd{dracula_neg}
+\end{alltt}
+\begin{verbatim}
+## # A tibble: 10 x 3
+##        word count sentiment
+##       <chr> <int>     <chr>
+##  1     hard    49  negative
+##  2  trouble    53  negative
+##  3     fell    59  negative
+##  4     dark    77  negative
+##  5  strange    90  negative
+##  6    death    94  negative
+##  7 terrible   100  negative
+##  8     dead   109  negative
+##  9     fear   137  negative
+## 10     poor   193  negative
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\section{The comparison bar plot}
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{The comparison bar plot}
+%%positive & negative factors & combination & ggplot stored into plot so it won't display right away
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{dracula_pos}\hlopt{$}\hlstd{word}\hlkwb{<-}\hlkwd{factor}\hlstd{(dracula_pos}\hlopt{$}\hlstd{word,}\hlkwc{levels}\hlstd{=dracula_pos}\hlopt{$}\hlstd{word)}
+\hlstd{dracula_neg}\hlopt{$}\hlstd{word}\hlkwb{<-}\hlkwd{factor}\hlstd{(dracula_neg}\hlopt{$}\hlstd{word,}\hlkwc{levels}\hlstd{=dracula_neg}\hlopt{$}\hlstd{word)}
+\hlstd{dracula_comp}\hlkwb{<-}\hlkwd{rbind}\hlstd{(dracula_pos,dracula_neg)}
+
+\hlstd{plot}\hlkwb{<-}\hlkwd{ggplot}\hlstd{()}\hlopt{+}
+  \hlkwd{geom_bar}\hlstd{(}\hlkwc{data}\hlstd{=dracula_comp,}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=word,}\hlkwc{y}\hlstd{=count,} \hlkwc{fill}\hlstd{=sentiment,} \hlkwc{color}\hlstd{=sentiment),}\hlkwc{stat}\hlstd{=}\hlstr{'identity'}\hlstd{)}\hlopt{+}
+  \hlkwd{coord_flip}\hlstd{()}\hlopt{+}
+  \hlkwd{facet_wrap}\hlstd{(}\hlopt{~}\hlstd{sentiment,}\hlkwc{scales}\hlstd{=}\hlstr{'free_y'}\hlstd{)}\hlopt{+}
+  \hlkwd{scale_fill_manual}\hlstd{(}\hlkwc{values}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{'black'}\hlstd{,}\hlstr{'#ea6205'}\hlstd{))}\hlopt{+}
+  \hlkwd{scale_color_manual}\hlstd{(}\hlkwc{values}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{'#ea6205'}\hlstd{,}\hlstr{'black'}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\framebreak
+%% experiment with numbers in fig height
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-16-1}
+
+\end{knitrout}
+
